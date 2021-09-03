@@ -5,10 +5,22 @@ error_reporting(E_ALL);
 
 class Persona{
 
-    public $dni;
-    public $nombre;
-    public $edad;
-    public $nacionalidad;
+    private $dni;
+    private $nombre;
+    private $edad;
+    private $nacionalidad;
+
+    public function getDni(){ return $this->dni; }
+    public function setDni($dni){ $this->dni = $dni; }
+
+    public function getNombre(){ return $this->nombre; }
+    public function setNombre($nombre){ $this->nombre = $nombre; }
+
+    public function getEdad(){ return $this->edad; }
+    public function setEdad($edad){ $this->edad = $edad; }
+
+    public function getNacionalidad(){ return $this->nacionalidad; }
+    public function setNacionalidad($nacionalidad){ $this->nacionalidad = $nacionalidad; }
 
     public function imprimir(){
         echo "DNI = $this->dni<br>";
@@ -21,7 +33,16 @@ class Persona{
 
 class Alumno extends Persona{
 
-    public $legajo;
+    private $legajo;
+    
+    public function __get($propiedad) {
+        return $this->$propiedad;
+    }
+
+    public function __set($propiedad, $valor) {
+        $this->$propiedad = $valor;
+    }
+
 
     public function __construct(){
         $this->notaPortfolio = 0.0;
@@ -45,7 +66,18 @@ class Alumno extends Persona{
     }
 }
 class Docente extends Persona{
-    public $especialidad;
+    private $especialidad;
+    const ESPECIALIDAD_WP = "WordPress";
+    const ESPECIALIDAD_ECO = "Economía aplicada";
+    const ESPECIALIDAD_BBDD = "Base de datos" ;
+
+    public function __get($propiedad) {
+        return $this->$propiedad;
+    }
+
+    public function __set($propiedad, $valor) {
+        $this->$propiedad = $valor;
+    }
 
     public function imprimir(){
         echo "DNI: " . $this->dni . "<br>";
@@ -57,16 +89,19 @@ class Docente extends Persona{
     }
     
     public function imprimirEspecialidadesHabilidades(){
-
+        echo "Las especialidades hablitadas son: <br>";
+        echo self::ESPECIALIDAD_WP . "<br>";
+        echo self::ESPECIALIDAD_ECO . "<br>";
+        echo self::ESPECIALIDAD_BBDD . "<br>";
     }
 }
 
 //programa
 $persona1 = new Persona();
-$persona1->dni = "35678321";
-$persona1->nombre = "Juan Perez";
-$persona1->edad = 30;
-$persona1->nacionalidad = "Argentina";
+$persona1->setDni("35678321");
+$persona1->setNombre("Juan Perez");
+$persona1->setEdad(30);
+$persona1->setNacionalidad("Argentina");
 $persona1->imprimir();
 
 $alumno1 = new Alumno();
@@ -89,6 +124,7 @@ $alumno2->imprimir();
 
 $docente1 = new Docente();
 $docente1->nombre = "Juan Carlos Rosales";
+$docente1->especialidad = Docente::ESPECIALIDAD_WP;
 $docente1->imprimir();
 
 ?>
