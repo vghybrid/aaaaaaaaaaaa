@@ -66,6 +66,7 @@ class Alumno extends Persona{
     }
 }
 class Docente extends Persona{
+    
     private $especialidad;
     const ESPECIALIDAD_WP = "WordPress";
     const ESPECIALIDAD_ECO = "Economía aplicada";

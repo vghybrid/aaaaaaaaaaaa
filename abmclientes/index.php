@@ -1,18 +1,20 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+ini_set('error_reporting', E_ALL);
 
 if (file_exists("archivo.txt")) {
+    //Leer el archivo y almacenar su contenido json en  $jSonClientes
     $jsonClientes = file_get_contents("archivo.txt");
 
+    //Convertir el json en array $aClientes
     $aClientes = json_decode($jsonClientes, true);
 } else {
     $aClientes = array();
 }
 
 $id = isset($_REQUEST["id"]) ? $_REQUEST["id"] : "";
-
 
 if ($_POST) {
     $dni = trim($_REQUEST["txtDocumento"]);
@@ -22,7 +24,7 @@ if ($_POST) {
     $imagen = "";
 
     if ($_FILES["archivo"]["error"] === UPLOAD_ERR_OK) {
-        $nombreAleatorio = date("Ymdhmsi");
+        $nombreAleatorio = date("Ymdhmsi"); //2021010420453710
         $archivo_tmp = $_FILES["archivo"]["tmp_name"];
         $nombreArchivo = $_FILES["archivo"]["name"];
         $extension = pathinfo($nombreArchivo, PATHINFO_EXTENSION);
@@ -31,11 +33,14 @@ if ($_POST) {
     }
 
     if ($id != "") {
+        //Actualizar cliente
         if ($_FILES["archivo"]["error"] !== UPLOAD_ERR_OK) {
             $imagen = $aClientes[$id]["imagen"];
         } else {
+            //Si está subiendo una nueva imagen, debe eliminar la imagen anterior
             unlink("imagenes/" . $aClientes[$id]["imagen"]);
         }
+
         $aClientes[$id] = array(
             "dni" => $dni,
             "nombre" => $nombre,
@@ -44,6 +49,7 @@ if ($_POST) {
             "imagen" => $imagen
         );
     } else {
+        //Insertar nuevo cliente
         $aClientes[] = array(
             "dni" => $dni,
             "nombre" => $nombre,
@@ -52,7 +58,10 @@ if ($_POST) {
             "imagen" => $imagen
         );
     }
+    //Convertir el array a json y almacenarlo en una variable $jSonClientes
     $jsonClientes = json_encode($aClientes);
+
+    //Almacenar el contenido de la variable json en el archivo.txt
     file_put_contents("archivo.txt", $jsonClientes);
     header("Location: index.php");
 }
@@ -91,6 +100,11 @@ if ($id != "" && isset($_REQUEST["do"]) && $_REQUEST["do"] == "eliminar") {
             <div class="col-6">
                 <form action="" method="POST" enctype="multipart/form-data">
                     <div class="row">
+                        <?php if (isset($msg) && $msg != "") : ?>
+                            <div class="alert alert-success" role="alert">
+                                <?php echo $msg; ?>
+                            </div>
+                        <?php endif; ?>
                         <div class="col-12">
                             <label>DNI:*
                                 <input type="text" name="txtDocumento" id="txtDocumento" class="form-control" require value="<?php echo isset($aClientes[$id]["dni"]) ? $aClientes[$id]["dni"] : ""; ?>">
@@ -133,7 +147,7 @@ if ($id != "" && isset($_REQUEST["do"]) && $_REQUEST["do"] == "eliminar") {
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <?php foreach ($aClientes as $pos => $clientes): ?>
+                    <?php foreach ($aClientes as $pos => $clientes) : ?>
                         <tr>
                             <td><img src="imagenes/<?php echo $clientes["imagen"]; ?>" class="img-thumbnail"></td>
                             <td><?php echo $clientes["dni"]; ?></td>
