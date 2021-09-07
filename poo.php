@@ -29,12 +29,22 @@ class Persona{
         echo "Nacionalidad = $this->nacionalidad<br>";
         echo "<br>";
     }
+
+    public function __destruct() {
+        echo "Destruyendo el objeto " . $this->nombre . "<br>";
+    }
 }
 
 class Alumno extends Persona{
 
     private $legajo;
     
+    public function __construct(){
+        $this->notaPortfolio = 0.0;
+        $this->notaPhp = 0.0;
+        $this->notaProyecto = 0.0;
+    }
+
     public function __get($propiedad) {
         return $this->$propiedad;
     }
@@ -43,12 +53,6 @@ class Alumno extends Persona{
         $this->$propiedad = $valor;
     }
 
-
-    public function __construct(){
-        $this->notaPortfolio = 0.0;
-        $this->notaPhp = 0.0;
-        $this->notaProyecto = 0.0;
-    }
     public function imprimir(){
         echo "DNI: " . $this->dni . "<br>";
         echo "Nombre: " . $this->nombre . "<br>";
@@ -63,6 +67,10 @@ class Alumno extends Persona{
     }
     public function calcularPromedio(){
         return ($this->notaPortfolio + $this->notaPhp + $this->notaProyecto) / 3;
+    }
+
+    public function __destruct() {
+        echo "Destruyendo el objeto " . $this->nombre . "<br>";
     }
 }
 class Docente extends Persona{
@@ -94,6 +102,10 @@ class Docente extends Persona{
         echo self::ESPECIALIDAD_WP . "<br>";
         echo self::ESPECIALIDAD_ECO . "<br>";
         echo self::ESPECIALIDAD_BBDD . "<br>";
+    }
+
+    public function __destruct() {
+        echo "Destruyendo el objeto " . $this->nombre . "<br>";
     }
 }
 
