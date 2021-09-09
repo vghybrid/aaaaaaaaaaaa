@@ -3,7 +3,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-class Cliente{
+class Cliente
+{
 
     private $dni;
     private $nombre;
@@ -11,19 +12,23 @@ class Cliente{
     private $correo;
     private $descuento;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->descuento = 0.0;
     }
 
-    public function __get($propiedad) {
+    public function __get($propiedad)
+    {
         return $this->$propiedad;
     }
 
-    public function __set($propiedad, $valor) {
+    public function __set($propiedad, $valor)
+    {
         $this->$propiedad = $valor;
     }
 
-    public function imprimir() {
+    public function imprimir()
+    {
         echo "DNI = $this->dni<br>";
         echo "Nombre = $this->nombre<br>";
         echo "Telefono = $this->telefono<br>";
@@ -33,7 +38,8 @@ class Cliente{
     }
 }
 
-class Producto {
+class Producto
+{
 
     private $cod;
     private $nombre;
@@ -41,21 +47,25 @@ class Producto {
     private $descripcion;
     private $iva;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->precio = 0.0;
         $this->iva = 0.0;
     }
 
 
-    public function __get($propiedad) {
+    public function __get($propiedad)
+    {
         return $this->$propiedad;
     }
 
-    public function __set($propiedad, $valor) {
+    public function __set($propiedad, $valor)
+    {
         $this->$propiedad = $valor;
     }
 
-    public function imprimir() {
+    public function imprimir()
+    {
         echo "COD = $this->cod<br>";
         echo "Nombre = $this->nombre<br>";
         echo "Precio = $this->precio<br>";
@@ -65,37 +75,43 @@ class Producto {
     }
 }
 
-class Carrito{
+class Carrito
+{
 
     private $cliente;
     private $aProductos;
     private $subTotal;
     private $total;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->subtotal = 0.0;
         $this->total = 0.0;
         $this->aProductos = array();
     }
-    public function __get($propiedad) {
+    public function __get($propiedad)
+    {
         return $this->$propiedad;
     }
 
-    public function __set($propiedad, $valor) {
+    public function __set($propiedad, $valor)
+    {
         $this->$propiedad = $valor;
     }
 
-    public function cargarProducto($producto){
+    public function cargarProducto($producto)
+    {
         $this->aProductos[] = $producto;
     }
 
-    public function imprimirTicket(){
-        echo "<table class='table-hover border shadow' style='width:400px'>";
-        echo "<tr>" . "<th colspan='2' class='text-center'>" . "Supermercado" . "</th>". "</tr>";
+    public function imprimirTicket()
+    {
+        echo "<table class='table-bordered border shadow' style='width:400px;'>";
+        echo "<tr>" . "<th colspan='2' class='text-center'>" . "Supermercado" . "</th>" . "</tr>";
         echo "<tr>";
         echo "<th>" . "Fecha" . "</th>";
         echo "<td>" . date("d/m/Y") . "</td>";
-        echo "</tr";
+        echo "</tr>";
         echo "<tr>";
         echo "<th>" . "DNI" . "</th>";
         echo "<td>" . $this->cliente->dni . "</td>";
@@ -107,20 +123,20 @@ class Carrito{
         echo "<tr>";
         echo "<th colspan='2'>" . "Productos:" . "</th>";
         echo "</tr>";
-        foreach($this->aProductos as $producto) {
+        foreach ($this->aProductos as $producto) {
             echo "<tr>";
             echo "<td>" . $producto->nombre . "</td>";
             echo "<td>" . "$" . number_format($producto->precio, 2, ",", ".") . "</td>";
             echo "</tr>";
             $this->subTotal += $producto->precio;
-            $this->total += $producto->precio * (($producto->iva / 100) +1);
+            $this->total += $producto->precio * (($producto->iva / 100) + 1);
         }
         echo "<tr>";
-        echo "<th>". "Subtotal: " . "</th>";
+        echo "<th>" . "Subtotal: " . "</th>";
         echo "<td>" . "$" . number_format($this->subTotal, 2, ",", ".") . "</td>";
         echo "</tr>";
         echo "<tr>";
-        echo "<th>". "Total: " . "</th>";
+        echo "<th>" . "Total: " . "</th>";
         echo "<td>" . "$" . number_format($this->total, 2, ",", ".") . "</td>";
         echo "</tr>";
         echo "</table>";
@@ -175,7 +191,7 @@ $carrito->cargarProducto($producto2);
 <body>
     <main class="container">
         <div class="row">
-            <div class="col-12">
+            <div class="col-12 m-5">
                 <?php $carrito->imprimirTicket(); ?>
             </div>
         </div>

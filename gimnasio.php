@@ -3,35 +3,30 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-class Persona
-{
+class Persona {
 
     protected $dni;
     protected $nombre;
     protected $correo;
     protected $telefono;
 
-    public function __construct($dni, $nombre, $correo, $telefono)
-    {
+    public function __construct($dni, $nombre, $correo, $telefono) {
         $this->dni = $dni;
         $this->nombre = $nombre;
         $this->correo = $correo;
         $this->telefono = $telefono;
     }
 
-    public function __get($propiedad)
-    {
+    public function __get($propiedad) {
         return $this->$propiedad;
     }
 
-    public function __set($propiedad, $valor)
-    {
+    public function __set($propiedad, $valor) {
         $this->$propiedad = $valor;
     }
 }
 
-class Alumno extends Persona
-{
+class Alumno extends Persona {
 
     private $fechaNac;
     private $peso;
@@ -39,8 +34,7 @@ class Alumno extends Persona
     private $aptoFisico;
     private $presentismo;
 
-    public function __construct($dni, $nombre, $correo, $telefono, $fechaNac)
-    {
+    public function __construct($dni, $nombre, $correo, $telefono, $fechaNac) {
         $this->dni = $dni;
         $this->nombre = $nombre;
         $this->correo = $correo;
@@ -52,31 +46,26 @@ class Alumno extends Persona
         $this->aptoFisico = false;
     }
 
-    public function __get($propiedad)
-    {
+    public function __get($propiedad) {
         return $this->$propiedad;
     }
 
-    public function __set($propiedad, $valor)
-    {
+    public function __set($propiedad, $valor) {
         $this->$propiedad = $valor;
     }
 
-    public function SetFichaMedica($peso, $altura, $aptoFisico)
-    {
+    public function SetFichaMedica($peso, $altura, $aptoFisico) {
         $this->peso = $peso;
         $this->altura = $altura;
         $this->aptoFisico = $aptoFisico;
     }
 }
 
-class Entrenador extends Persona
-{
+class Entrenador extends Persona {
 
     private $aClases;
 
-    public function __construct($dni, $nombre, $correo, $telefono)
-    {
+    public function __construct($dni, $nombre, $correo, $telefono) {
         $this->dni = $dni;
         $this->nombre = $nombre;
         $this->correo = $correo;
@@ -84,77 +73,105 @@ class Entrenador extends Persona
         $this->aClases = array();
     }
 
-    public function __get($propiedad)
-    {
+    public function __get($propiedad) {
         return $this->$propiedad;
     }
 
-    public function __set($propiedad, $valor)
-    {
+    public function __set($propiedad, $valor) {
         $this->$propiedad = $valor;
     }
 }
 
 
-class Clase
-{
+class Clase {
 
     private $nombre;
     private $entrenador;
     private $aAlumno;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->aAlumno = array();
     }
 
-    public function __get($propiedad)
-    {
+    public function __get($propiedad) {
         return $this->$propiedad;
     }
 
-    public function __set($propiedad, $valor)
-    {
+    public function __set($propiedad, $valor) {
         $this->$propiedad = $valor;
     }
 
-    public function inscribirAlumno($alumno)
-    {
+    public function inscribirAlumno($alumno) {
         $this->aAlumno[] = $alumno;
     }
 
-    public function AsignarEntrenador($entrenador)
-    {
+    public function AsignarEntrenador($entrenador) {
         $this->entrenador = $entrenador;
     }
 
-    public function imprimirListado()
-    {
-        echo "<table class='table-hover border shadow'>";
+    public function imprimirListado() {
+        echo "<table class='table-bordered border shadow' style='width:400px'>";
         echo "<tr>";
-        echo "<th>" . "Clase: " . "</th>";
-        echo "<td>" . $this->nombre . "</td>";
+        echo "<th class='text-center' colspan='2'>" . "Datos del entrenador" . "</th>";
         echo "</tr>";
         echo "<tr>";
-        echo "<td>" . "Entrenador:" . $this->entrenador->nombre . "</td>";
+        echo "<th>" . "Entrenador: " . "</th>";
+        echo "<td>" . $this->entrenador->nombre . "</td>";
         echo "</tr>";
         echo "<tr>";
-        echo "<td>" . "DNI:" . $this->entrenador->dni . "</td>";
+        echo "<th>" . "DNI: " . "</th>";
+        echo "<td>" . $this->entrenador->dni . "</td>";
         echo "</tr>";
         echo "<tr>";
-        echo "<td>" . "Correo:" . $this->entrenador->correo . "</td>";
+        echo "<th>" . "Correo: " . "</th>";
+        echo "<td>" . $this->entrenador->correo . "</td>";
         echo "</tr>";
         echo "<tr>";
-        echo "<td>" . "Teléfono:" . $this->entrenador->telefono . "</td>";
+        echo "<th>" . "Teléfono: " . "</th>";
+        echo "<td>" . $this->entrenador->telefono . "</td>";
+        echo "</tr>";
+        echo "<tr>";
+        echo "<th class='text-center' colspan='2'>" . "Datos de los Alumnos" . "</th>";
         echo "</tr>";
         foreach ($this->aAlumno as $alumno) {
             echo "<tr>";
-            echo "<td>" . "DNI:" $alumno->dni . "</td>";
+            echo "<th>" . "Nombre: " . "</th>";
+            echo "<td>" . $alumno->nombre . "</td>";
             echo "</tr>";
             echo "<tr>";
-            echo "<td>" . "Nombre:" . "</td>";
+            echo "<th>" . "DNI: " . "</th>";
+            echo "<td>" . $alumno->dni . "</td>";
+            echo "</tr>";
+            echo "<tr>";
+            echo "<th>" . "Correo: " . "</th>";
+            echo "<td>" . $alumno->correo . "</td>";
+            echo "</tr>";
+            echo "<tr>";
+            echo "<th>" . "Teléfono: " . "</th>";
+            echo "<td>" . $alumno->telefono . "</td>";
+            echo "</tr>";
+            echo "<tr>";
+            echo "<th>" . "Fecha de nacimiento: " . "</th>";
+            echo "<td>" . $alumno->fechaNac . "</td>";
+            echo "</tr>";
+            echo "<tr>";
+            echo "<th>" . "Peso: " . "</th>";
+            echo "<td>" . $alumno->peso . "</td>";
+            echo "</tr>";
+            echo "<tr>";
+            echo "<th>" . "Altura: " . "</th>";
+            echo "<td>" . $alumno->altura . "</td>";
+            echo "</tr>";
+            echo "<tr>";
+            echo "<th>" . "Presentismo: " . "</th>";
+            echo "<td>" . $alumno->presentismo . "</td>";
+            echo "</tr>";
+            echo "<tr>";
+            echo "<th>" . "Aptitud física: " . "</th>";
+            echo "<td>" . ($alumno->aptoFisico == true ? "APTO" : "NO APTO"). "</td>";
             echo "</tr>";
         }
+        echo "</table>";
     }
 }
 
@@ -193,8 +210,6 @@ $clase2->inscribirAlumno($alumno1);
 $clase2->inscribirAlumno($alumno2);
 $clase2->inscribirAlumno($alumno3);
 
-
-
 ?>
 
 <!DOCTYPE html>
@@ -211,12 +226,27 @@ $clase2->inscribirAlumno($alumno3);
 <body>
     <main class="container">
         <div class="row">
-            <div class="col-6 p-5">
-                <?php $clase1->imprimirListado(); ?>
+            <div class="col-sm-6 col-12 p-5">
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="text-uppercase text-center me-5" style="font-size: 16px;">clase funcional</h3>
+                    </div>
+                    <div class="col-12">
+                        <?php $clase1->imprimirListado(); ?>
+                    </div>
+                </div>
             </div>
-            <div class="col-6 p-5">
-                <?php $clase2->imprimirListado(); ?>
+            <div class="col-sm-6 col-12 p-5">
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="text-uppercase text-center me-5" style="font-size: 16px;">clase de zumba</h3>
+                    </div>
+                    <div class="col-12">
+                        <?php $clase2->imprimirListado(); ?>
+                    </div>
+                </div>
             </div>
+        </div>
     </main>
 </body>
 
