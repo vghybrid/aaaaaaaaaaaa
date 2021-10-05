@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-class Persona {
+abstract class Persona {
 
     protected $dni;
     protected $nombre;
@@ -35,10 +35,7 @@ class Alumno extends Persona {
     private $presentismo;
 
     public function __construct($dni, $nombre, $correo, $telefono, $fechaNac) {
-        $this->dni = $dni;
-        $this->nombre = $nombre;
-        $this->correo = $correo;
-        $this->telefono = $telefono;
+        parent::__construct($dni, $nombre, $correo, $telefono);
         $this->fechaNac = $fechaNac;
         $this->peso = 0.0;
         $this->altura = 0.0;
@@ -66,10 +63,7 @@ class Entrenador extends Persona {
     private $aClases;
 
     public function __construct($dni, $nombre, $correo, $telefono) {
-        $this->dni = $dni;
-        $this->nombre = $nombre;
-        $this->correo = $correo;
-        $this->telefono = $telefono;
+        parent::__construct($dni, $nombre, $correo, $telefono);
         $this->aClases = array();
     }
 

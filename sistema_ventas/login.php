@@ -1,18 +1,29 @@
 <?php
-session_start();
+include_once "config.php";
+include_once "entidades/usuario.php";
+
 
 if($_POST){
-  $usuario = trim($_REQUEST["txtUsuario"]);
-  $clave = trim($_REQUEST["txtClave"]);
+	//Comprobamos que el usuario sea admin y la clave sea admin123
+	$usuario = trim($_POST["txtUsuario"]); //trim elimina espacios de los laterales
+	$clave = trim($_POST["txtClave"]);
 
-  if($usuario == "admin" && $clave == "admin123"){
-    $_SESSION["nombre"] = "Anderson";
-    header("Location: index.php");
-  }else{
-    $msg = "Usuario o contraseña incorrecta";
-  }
+  $entidadUsuario = new Usuario();
+  $entidadUsuario->obtenerPorUsuario($usuario); //a desarrollar
+  
 
+	//Si es correcto creamos una variable de session llamada nombre y tenga el valor "Ana Valle"
+	if($entidadUsuario->nombre != "" && $entidadUsuario->verificarClave($clave, $entidadUsuario->clave)){
+		$_SESSION["nombre"] = $entidadUsuario->nombre;
+
+		//Redireccionamos a la home
+		header("location:index.php");
+	} else {
+		//Si no es correcto la clave o el usuario mostrar en pantalla "Usuario o clave incorrecto"
+		$msg = "Usuario o clave incorrecto";
+	}
 }
+
 
 
 ?>

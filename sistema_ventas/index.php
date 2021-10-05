@@ -1,6 +1,14 @@
 <?php
+include_once "config.php";
+include_once "entidades/venta.php";
 
-include_once("header.php"); 
+//$venta = new Venta();
+//$facturacionMensual = $venta->obtenerFacturacionMensual(date('m'));
+//$facturacionAnual = $venta->obtenerFacturacionAnual(date('Y'));
+
+
+
+include_once "header.php"; 
 
 ?>
 

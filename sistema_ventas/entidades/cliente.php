@@ -1,7 +1,6 @@
 <?php
 
-class Cliente
-{
+class Cliente{
     private $idcliente;
     private $nombre;
     private $cuit;
@@ -22,14 +21,12 @@ class Cliente
         return $this->$atributo;
     }
 
-    public function __set($atributo, $valor)
-    {
+    public function __set($atributo, $valor){
         $this->$atributo = $valor;
         return $this;
     }
 
-    public function cargarFormulario($request)
-    {
+    public function cargarFormulario($request){
         $this->idcliente = isset($request["id"]) ? $request["id"] : "";
         $this->nombre = isset($request["txtNombre"]) ? $request["txtNombre"] : "";
         $this->cuit = isset($request["txtCuit"]) ? $request["txtCuit"] : "";
@@ -43,8 +40,7 @@ class Cliente
         }
     }
 
-    public function insertar()
-    {
+    public function insertar(){
         //Instancia la clase mysqli con el constructor parametrizado
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
         //Arma la query
@@ -78,20 +74,19 @@ class Cliente
         $mysqli->close();
     }
 
-    public function actualizar()
-    {
+    public function actualizar(){
 
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
         $sql = "UPDATE clientes SET
-                nombre = '" . $this->nombre . "',
-                cuit = '" . $this->cuit . "',
-                telefono = '" . $this->telefono . "',
-                correo = '" . $this->correo . "',
-                fecha_nac =  '" . $this->fecha_nac . "',
-                fk_idprovincia =  '" . $this->fk_idprovincia . "',
-                fk_idlocalidad =  '" . $this->fk_idlocalidad . "',
-                domicilio =  '" . $this->domicilio . "'
-                WHERE idcliente = " . $this->idcliente;
+                nombre = '$this->nombre',
+                cuit = '$this->cuit',
+                telefono = '$this->telefono',
+                correo = '$this->correo',
+                fecha_nac =  '$this->fecha_nac',
+                fk_idprovincia =  $this->fk_idprovincia,
+                fk_idlocalidad =  $this->fk_idlocalidad,
+                domicilio =  '$this->domicilio'
+                WHERE idcliente = $this->idcliente";
 
         if (!$mysqli->query($sql)) {
             printf("Error en query: %s\n", $mysqli->error . " " . $sql);
@@ -163,8 +158,7 @@ class Cliente
 
         $aResultado = array();
         if($resultado){
-            //Convierte el resultado en un array asociativo
-
+            //fetch_assoc convierte el resultado en un array asociativo
             while($fila = $resultado->fetch_assoc()){
                 $entidadAux = new Cliente();
                 $entidadAux->idcliente = $fila["idcliente"];
@@ -179,6 +173,7 @@ class Cliente
                 $aResultado[] = $entidadAux;
             }
         }
+        $mysqli->close();
         return $aResultado;
     }
 
