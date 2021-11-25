@@ -18,13 +18,23 @@ if ($_POST) {
 
         $msg["texto"] = "Guardado correctamente";
         $msg["codigo"] = "alert-success";
-        
     } else if (isset($_POST["btnBorrar"])) {
         $cliente->eliminar();
         header("Location: venta-listado.php");
     }
 }
 
+if(isset($_GET["do"]) && $_GET["do"] == "buscarProducto"){
+    $aResultado = array();
+    $idProducto = $_GET["id"];
+    $producto = new Producto();
+    $producto->idproducto = $idProducto;
+    $producto->obtenerPorId();
+    $aResultado["precio"] = $producto->precio;
+    $aResultado["cantidad"] = $producto->cantidad;
+    echo json_encode($aResultado);
+    exit;
+}
 
 $cliente = new Cliente();
 $aClientes = $cliente->obtenerTodos();
@@ -95,7 +105,7 @@ include_once "header.php";
         </div>
         <div class="col-6 form-group">
             <label for="lstProducto">Producto:</label>
-            <select name="lstProducto" id="lstProducto" class="form-control">
+            <select name="lstProducto" id="lstProducto" class="form-control" onchange="fBuscarPrecio();">
                 <option value="" disabled selected>Seleccionar</option>
                 <?php foreach ($aProductos as $producto) : ?>
                     <?php if ($producto->idproducto == $venta->fk_idproducto) : ?>
@@ -109,19 +119,68 @@ include_once "header.php";
     </div>
     <div class="row">
         <div class="col-6 form-group">
-            <label for="txtPrecioUni">Precio Unitario:</label>
-            <input type="text" required class="form-control" name="txtPrecioUni" id="txtPrecioUni" value="$ <?php echo $venta->preciounitario; ?>">
+            <label for="txtPrecioUni">Precio unitario:</label>
+            <input type="text" class="form-control" id="txtPrecioUniCurrency" value="$ <?php echo $venta->preciounitario; ?>" disabled>
+            <input type="hidden" class="form-control" name="txtPrecioUni" id="txtPrecioUni" value="<?php echo $venta->preciounitario; ?>">
         </div>
         <div class="col-6 form-group">
             <label for="txtCantidad">Cantidad:</label>
-            <input type="text" required class="form-control" name="txtCantidad" id="txtCantidad" value="<?php echo $venta->cantidad; ?>">
+            <input type="text" class="form-control" name="txtCantidad" id="txtCantidad" value="<?php echo $venta->cantidad; ?>" onchange="fCalcularTotal();">
+            <span id="msgStock" class="text-danger" style="display:none;">No hay stock suficiente</span>
         </div>
     </div>
     <div class="row">
         <div class="col-6 form-group">
             <label for="txtTotal">Total:</label>
-            <input type="text" required class="form-control" name="txtTotal" id="txtTotal" value="<?php $venta->total; ?>">
+            <input type="text" class="form-control" name="txtTotal" id="txtTotal" value="<?php echo $venta->total; ?>">
         </div>
     </div>
 </div>
+
+<script>
+    function fBuscarPrecio() {
+        let idProducto = $("#lstProducto option:selected").val();
+        $.ajax({
+            type: "GET",
+            url: "venta-formulario.php?do=buscarProducto",
+            data: { id: idProducto },
+            async: true,
+            dataType: "json",
+            success: function(respuesta) {
+                strResultado = Intl.NumberFormat("es-AR", {
+                    style: 'currency',
+                    currency: 'ARS'
+                }).format(respuesta.precio);
+                $("#txtPrecioUniCurrency").val(strResultado);
+                $("#txtPrecioUni").val(respuesta.precio);
+            }
+        });
+    }
+
+    function fCalcularTotal() {
+        var idProducto = $("#lstProducto option:selected").val();
+        var precio = parseFloat($('#txtPrecioUni').val());
+        var cantidad = parseInt($('#txtCantidad').val());
+
+        $.ajax({
+            type: "GET",
+            url: "venta-formulario.php?do=buscarProducto",
+            data: { id:idProducto },
+            async: true,
+            dataType: "json",
+            success: function(respuesta){
+                var resultado = 0;
+                if(cantidad < respuesta.cantidad) {
+                    resultado = precio * cantidad;
+                    $("#msgStock").hide();
+                } else {
+                    $("#msgStock").show();
+                }
+                strResultado = Intl.NumberFormat("es-AR", {style: 'currency', currency: 'ARS'}).format(resultado);
+                $("#txtTotal").val(strResultado);
+            }
+        });
+    }
+</script>
+
 <?php include_once("footer.php"); ?>
